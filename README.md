@@ -1,4 +1,5 @@
-# React-Pattern-Lock
+# React-Pattern-Lock for React 18
+
 
 [![Lint & Test](https://github.com/WinterCore/react-pattern-lock/actions/workflows/integration.yml/badge.svg)](https://github.com/WinterCore/react-pattern-lock/actions/workflows/integration.yml)
 ### Android's pattern lock
@@ -10,7 +11,7 @@
 [![Edit n5j7knjo54](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/n5j7knjo54)
 
 ## Installation
-```npm install react-pattern-lock```
+```npm install bosskabouter/react-pattern-lock```
 ## How to use
 
 ```javascript
