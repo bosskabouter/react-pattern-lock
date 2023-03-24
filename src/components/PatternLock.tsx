@@ -1,13 +1,13 @@
 import * as React            from "react";
 import * as PropTypes        from "prop-types";
 import { createGlobalStyle } from "styled-components";
-import classnames            from "classnames";
 
 import Point      from "./Point";
 import Connectors from "./Connectors";
 
 import { getPoints, getCollidedPointIndex, getPointsInTheMiddle } from "../utils";
 import { Point as PointType } from "../types";
+import * as classnames from "classnames";
 
 const Styles = createGlobalStyle`
     * {
@@ -97,6 +97,7 @@ interface PatternLockProps {
     noPop?                   : boolean;
     invisible?               : boolean;
 
+    // eslint-disable-next-line no-unused-vars
     onChange(path: number[]) : void;
     onFinish()               : void;
 }
@@ -137,7 +138,7 @@ const PatternLock: React.FunctionComponent<PatternLockProps> = ({
                 if (allowJumping || !path.length) {
                     onChange([...path, index]);
                 } else {
-                    let pointsInTheMiddle = getPointsInTheMiddle(path[path.length - 1], index, size);
+                    const pointsInTheMiddle = getPointsInTheMiddle(path[path.length - 1], index, size);
                     if (allowOverlapping) onChange([...path, ...pointsInTheMiddle, index]);
                     else onChange([...path, ...pointsInTheMiddle.filter(point => path.indexOf(point) === -1), index]);
                 }
@@ -164,13 +165,13 @@ const PatternLock: React.FunctionComponent<PatternLockProps> = ({
         const [top, left] = onResize();  // retrieve boundingRect and force setPosition
         setInitialMousePosition({ x : touches[0].clientX - left, y : touches[0].clientY - top });
         setIsMouseDown(true);
-        checkCollision({ x: touches[0].clientX, y : touches[0].clientY });
+        checkCollision({ x : touches[0].clientX, y : touches[0].clientY });
     };
 
     React.useEffect(() => {
         if (!isMouseDown) return;
         const onMouseMove = ({ clientX, clientY }: MouseEvent): void => checkCollision({ x : clientX, y : clientY });
-        const onTouchMove = ({ touches }: TouchEvent): void => checkCollision({ x: touches[0].clientX, y : touches[0].clientY });
+        const onTouchMove = ({ touches }: TouchEvent): void => checkCollision({ x : touches[0].clientX, y : touches[0].clientY });
         wrapperRef.current.addEventListener("mousemove", onMouseMove);
         wrapperRef.current.addEventListener("touchmove", onTouchMove);
         return () => {
@@ -179,7 +180,7 @@ const PatternLock: React.FunctionComponent<PatternLockProps> = ({
         };
     });
 
-    React.useEffect(() => setHeight(wrapperRef.current.offsetWidth));
+    React.useEffect(() => setHeight(wrapperRef.current.offsetWidth),[]);
     React.useEffect(() => {
         window.addEventListener("resize", onResize);
         return () => window.removeEventListener("resize", onResize);
@@ -191,7 +192,7 @@ const PatternLock: React.FunctionComponent<PatternLockProps> = ({
             onResize();
         });
         return () => window.cancelAnimationFrame(rafId);
-    }, [height, size]);
+    }, [height, pointActiveSize, size]);
 
     React.useEffect(() => {
         const onRelease = () => {
@@ -200,14 +201,14 @@ const PatternLock: React.FunctionComponent<PatternLockProps> = ({
             if (!disabled && path.length) onFinish();
         };
 
-		window.addEventListener("mouseup", onRelease);
-		window.addEventListener("touchend", onRelease);
+        window.addEventListener("mouseup", onRelease);
+        window.addEventListener("touchend", onRelease);
 
         return () => {
             window.removeEventListener("mouseup", onRelease);
             window.removeEventListener("touchend", onRelease);
         };
-    }, [disabled, path]);
+    }, [disabled, path, onFinish]);
 
     return (
         <>
@@ -220,7 +221,7 @@ const PatternLock: React.FunctionComponent<PatternLockProps> = ({
                 ref          = { wrapperRef }
             >
                 {
-                    Array.from({ length: size ** 2 }).map((_, i) => (
+                    Array.from({ length : size ** 2 }).map((_, i) => (
                         <Point
                             key             = { i }
                             index           = { i }
