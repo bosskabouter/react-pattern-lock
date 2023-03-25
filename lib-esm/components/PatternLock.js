@@ -27,7 +27,7 @@ import * as PropTypes from "prop-types";
 import { createGlobalStyle } from "styled-components";
 import Point from "./Point";
 import Connectors from "./Connectors";
-import { getPoints, getCollidedPointIndex, getPointsInTheMiddle } from "../utils";
+import { getPoints, getCollidedPointIndex, getPointsInTheMiddle, } from "../utils";
 import classnames from "classnames";
 var Styles = createGlobalStyle(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n    * {\n        user-select none\n    }\n\n    .react-pattern-lock__pattern-wrapper {\n        touch-action: none;\n        width: 100%;\n        display: flex;\n        flex-wrap: wrap;\n        position: relative;\n    }\n    .react-pattern-lock__connector-wrapper {\n        position: absolute;\n        top: 0;\n        left: 0;\n        width: 100%;\n        height: 100%;\n        z-index: 1;\n        pointer-events: none;\n    }\n    .react-pattern-lock__connector {\n        background: white;\n        position: absolute;\n        transform-origin: center left;\n    }\n    .react-pattern-lock__point-wrapper {\n        display: flex;\n        justify-content: center;\n        align-items: center;\n    }\n    .react-pattern-lock__point {\n        cursor pointer;\n        display: flex;\n        justify-content: center;\n        align-items: center;\n    }\n    .react-pattern-lock__point-inner {\n        background: white;\n        border-radius: 50%;\n    }\n    .react-pattern-lock__point-inner.active {\n        animation: pop 300ms ease;\n    }\n    .react-pattern-lock__pattern-wrapper.disabled,\n    .react-pattern-lock__pattern-wrapper.disabled .react-pattern-lock__point {\n        cursor: not-allowed;\n    }\n    .react-pattern-lock__pattern-wrapper.disabled .react-pattern-lock__point-inner,\n    .react-pattern-lock__pattern-wrapper.disabled .react-pattern-lock__connector {\n        background: grey;\n    }\n\n    .react-pattern-lock__pattern-wrapper.success .react-pattern-lock__point-inner,\n    .react-pattern-lock__pattern-wrapper.success .react-pattern-lock__connector {\n        background: #00ff00;\n    }\n\n    .react-pattern-lock__pattern-wrapper.error .react-pattern-lock__point-inner,\n    .react-pattern-lock__pattern-wrapper.error .react-pattern-lock__connector {\n        background: red;\n    }\n\n    @keyframes pop {\n        from { transform scale(1); }\n        50% { transform scale(2); }\n        to { transform scale(1); }\n    }\n"], ["\n    * {\n        user-select none\n    }\n\n    .react-pattern-lock__pattern-wrapper {\n        touch-action: none;\n        width: 100%;\n        display: flex;\n        flex-wrap: wrap;\n        position: relative;\n    }\n    .react-pattern-lock__connector-wrapper {\n        position: absolute;\n        top: 0;\n        left: 0;\n        width: 100%;\n        height: 100%;\n        z-index: 1;\n        pointer-events: none;\n    }\n    .react-pattern-lock__connector {\n        background: white;\n        position: absolute;\n        transform-origin: center left;\n    }\n    .react-pattern-lock__point-wrapper {\n        display: flex;\n        justify-content: center;\n        align-items: center;\n    }\n    .react-pattern-lock__point {\n        cursor pointer;\n        display: flex;\n        justify-content: center;\n        align-items: center;\n    }\n    .react-pattern-lock__point-inner {\n        background: white;\n        border-radius: 50%;\n    }\n    .react-pattern-lock__point-inner.active {\n        animation: pop 300ms ease;\n    }\n    .react-pattern-lock__pattern-wrapper.disabled,\n    .react-pattern-lock__pattern-wrapper.disabled .react-pattern-lock__point {\n        cursor: not-allowed;\n    }\n    .react-pattern-lock__pattern-wrapper.disabled .react-pattern-lock__point-inner,\n    .react-pattern-lock__pattern-wrapper.disabled .react-pattern-lock__connector {\n        background: grey;\n    }\n\n    .react-pattern-lock__pattern-wrapper.success .react-pattern-lock__point-inner,\n    .react-pattern-lock__pattern-wrapper.success .react-pattern-lock__connector {\n        background: #00ff00;\n    }\n\n    .react-pattern-lock__pattern-wrapper.error .react-pattern-lock__point-inner,\n    .react-pattern-lock__pattern-wrapper.error .react-pattern-lock__connector {\n        background: red;\n    }\n\n    @keyframes pop {\n        from { transform scale(1); }\n        50% { transform scale(2); }\n        to { transform scale(1); }\n    }\n"])));
 var PatternLock = function (_a) {
@@ -50,10 +50,14 @@ var PatternLock = function (_a) {
                 }
                 else {
                     var pointsInTheMiddle = getPointsInTheMiddle(path[path.length - 1], index, size);
-                    if (allowOverlapping)
+                    if (allowOverlapping) {
                         onChange(__spreadArray(__spreadArray(__spreadArray([], path, true), pointsInTheMiddle, true), [index], false));
-                    else
-                        onChange(__spreadArray(__spreadArray(__spreadArray([], path, true), pointsInTheMiddle.filter(function (point) { return path.indexOf(point) === -1; }), true), [index], false));
+                    }
+                    else {
+                        onChange(__spreadArray(__spreadArray(__spreadArray([], path, true), pointsInTheMiddle.filter(function (point) { return path.indexOf(point) === -1; }), true), [
+                            index,
+                        ], false));
+                    }
                 }
             }
         }
@@ -77,11 +81,15 @@ var PatternLock = function (_a) {
         if (disabled)
             return;
         var _b = onResize(), top = _b[0], left = _b[1];
-        setInitialMousePosition({ x: touches[0].clientX - left, y: touches[0].clientY - top });
+        setInitialMousePosition({
+            x: touches[0].clientX - left,
+            y: touches[0].clientY - top,
+        });
         setIsMouseDown(true);
         checkCollision({ x: touches[0].clientX, y: touches[0].clientY });
     };
     React.useEffect(function () {
+        var ref = wrapperRef.current;
         if (!isMouseDown)
             return;
         var onMouseMove = function (_a) {
@@ -92,11 +100,11 @@ var PatternLock = function (_a) {
             var touches = _a.touches;
             return checkCollision({ x: touches[0].clientX, y: touches[0].clientY });
         };
-        wrapperRef.current.addEventListener("mousemove", onMouseMove);
-        wrapperRef.current.addEventListener("touchmove", onTouchMove);
+        ref.addEventListener("mousemove", onMouseMove);
+        ref.addEventListener("touchmove", onTouchMove);
         return function () {
-            wrapperRef.current.removeEventListener("mousemove", onMouseMove);
-            wrapperRef.current.removeEventListener("touchmove", onTouchMove);
+            ref.removeEventListener("mousemove", onMouseMove);
+            ref.removeEventListener("touchmove", onTouchMove);
         };
     });
     React.useEffect(function () { return setHeight(wrapperRef.current.offsetWidth); }, []);
@@ -127,10 +135,13 @@ var PatternLock = function (_a) {
     }, [disabled, path, onFinish]);
     return (React.createElement(React.Fragment, null,
         React.createElement(Styles, null),
-        React.createElement("div", { className: classnames(["react-pattern-lock__pattern-wrapper", { error: error, success: success, disabled: disabled }, className]), style: __assign(__assign({}, style), { width: width, height: height }), onMouseDown: onHold, onTouchStart: onTouch, ref: wrapperRef },
+        React.createElement("div", { className: classnames([
+                "react-pattern-lock__pattern-wrapper",
+                { error: error, success: success, disabled: disabled },
+                className,
+            ]), style: __assign(__assign({}, style), { width: width, height: height }), onMouseDown: onHold, onTouchStart: onTouch, ref: wrapperRef },
             Array.from({ length: Math.pow(size, 2) }).map(function (_, i) { return (React.createElement(Point, { key: i, index: i, size: size, pointSize: pointSize, pointActiveSize: pointActiveSize, pop: !noPop && isMouseDown && path[path.length - 1] === i, selected: path.indexOf(i) > -1 })); }),
-            !invisible && points.length &&
-                React.createElement(Connectors, { initialMousePosition: initialMousePosition, wrapperPosition: position, path: path, points: points, pointActiveSize: pointActiveSize, connectorRoundedCorners: connectorRoundedCorners, connectorThickness: connectorThickness }))));
+            !invisible && points.length && (React.createElement(Connectors, { initialMousePosition: initialMousePosition, wrapperPosition: position, path: path, points: points, pointActiveSize: pointActiveSize, connectorRoundedCorners: connectorRoundedCorners, connectorThickness: connectorThickness })))));
 };
 PatternLock.propTypes = {
     path: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
@@ -150,7 +161,7 @@ PatternLock.propTypes = {
     noPop: PropTypes.bool,
     invisible: PropTypes.bool,
     onChange: PropTypes.func.isRequired,
-    onFinish: PropTypes.func.isRequired
+    onFinish: PropTypes.func.isRequired,
 };
 export default PatternLock;
 var templateObject_1;

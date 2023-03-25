@@ -18,7 +18,7 @@
         "consistent-return"    : 0,
         "no-unused-vars"       : 1,
         "quotes"               : ["warn", "double"],
-        "indent"               : ["warn", 4],
+        "indent"               : ["warn", 2],
         "key-spacing"          : [
             "warn",
             {
@@ -44,7 +44,7 @@
             }
         ],
         "comma-dangle": [
-            "error",
+            "warn",
             "never"
         ],
         "curly": [
