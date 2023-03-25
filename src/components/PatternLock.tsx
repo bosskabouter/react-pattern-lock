@@ -7,7 +7,7 @@ import Connectors from "./Connectors";
 
 import { getPoints, getCollidedPointIndex, getPointsInTheMiddle } from "../utils";
 import { Point as PointType } from "../types";
-import * as classnames from "classnames";
+import classnames from "classnames";
 
 const Styles = createGlobalStyle`
     * {

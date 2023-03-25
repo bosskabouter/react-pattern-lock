@@ -10,7 +10,8 @@
         "module"           : "commonjs",
         "moduleResolution" : "node",
         "target"           : "es5",
-        "jsx"              : "react"
+        "jsx"              : "react",
+        "esModuleInterop": true
     },
     "include": [
         "src"
